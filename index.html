@@ -145,10 +145,10 @@
             grid.innerHTML = filtered.map(p => `
                 <article class="product-card glass" data-category="${p.tag}">
                     <div class="product-image-wrapper">
-                        ${(p.image || (p.colors && p.colors[0].img)) ? 
-                            `<img src="${p.image || p.colors[0].img}" alt="${p.name}" class="product-image" id="img-${p.id}">` :
-                            `<div class="placeholder-img" style="display:flex;align-items:center;justify-content:center;height:100%;background:#fff;color:#000;font-weight:800;text-align:center;padding:1rem;">${p.name}</div>`
-                        }
+                        ${(p.image || (p.colors && p.colors[0].img)) ?
+                    `<img src="${p.image || p.colors[0].img}" alt="${p.name}" class="product-image" id="img-${p.id}">` :
+                    `<div class="placeholder-img" style="display:flex;align-items:center;justify-content:center;height:100%;background:#fff;color:#000;font-weight:800;text-align:center;padding:1rem;">${p.name}</div>`
+                }
                     </div>
                     <div class="product-info">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
@@ -186,11 +186,38 @@
                         </div>
                         <div class="product-footer">
                             <span class="price">$<span id="price-${p.id}">${p.price || p.sizes[0].price}</span> <small class="currency">CLP</small></span>
-                            ${p.model ? `<button class="btn-3d" onclick="openViewer('${p.id}')">Ver 3D</button>` : ''}
+                            <div style="display: flex; gap: 0.5rem;">
+                                ${p.model ? `<button class="btn-3d" onclick="openViewer('${p.id}')">3D</button>` : ''}
+                                <button class="btn-whatsapp" onclick="orderWhatsApp('${p.id}')">
+                                    Pedir
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </article>
             `).join('');
+        }
+
+        function orderWhatsApp(id) {
+            const product = products.find(p => p.id === id);
+            const colorEl = document.getElementById(`color-${id}`);
+            const currentColor = colorEl ? colorEl.textContent : (product.color || 'Estándar');
+
+            let currentSize = product.size;
+            if (product.sizes) {
+                const sizeEl = document.getElementById(`val-${id}`);
+                if (sizeEl) currentSize = sizeEl.textContent;
+            }
+
+            const currentPrice = document.getElementById(`price-${id}`).textContent;
+
+            // AQUÍ PONES TU NÚMERO (código de país + número, sin el + ni espacios)
+            const phoneNumber = "56992989785";
+
+            const message = `Hola Yamiyuki! 🚀\nMe interesa este producto:\n\n*${product.name}*\n🎨 Color: ${currentColor}\n📏 Medida: ${currentSize}\n💰 Precio: $${currentPrice} CLP\n\n¿Tienen disponibilidad?`;
+
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
         }
 
         function changeProductColor(id, imgPath, colorName, el) {
@@ -314,7 +341,7 @@
             // Luces
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
-            
+
             const mainLight = new THREE.DirectionalLight(0xffffff, 1);
             mainLight.position.set(5, 10, 7);
             scene.add(mainLight);
@@ -335,7 +362,7 @@
         function openViewer(id) {
             const product = products.find(p => p.id === id);
             const modal = document.getElementById('viewer-modal');
-            
+
             document.getElementById('modal-product-name').textContent = product.name;
             modal.classList.add('show');
             gsap.to(modal, { opacity: 1, duration: 0.4 });
@@ -349,7 +376,7 @@
 
             // Cargador R128 con soporte para compresión DRACO
             const loader = new THREE.GLTFLoader();
-            
+
             const dracoLoader = new THREE.DRACOLoader();
             // Ruta a los decodificadores de Google Draco
             dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/libs/draco/');
@@ -360,12 +387,12 @@
 
             loader.load(modelPath, (gltf) => {
                 currentModel = gltf.scene;
-                
+
                 // Centrar y Escalar
                 const box = new THREE.Box3().setFromObject(currentModel);
                 const size = box.getSize(new THREE.Vector3());
                 const center = box.getCenter(new THREE.Vector3());
-                
+
                 const maxDim = Math.max(size.x, size.y, size.z);
                 const scale = 3.5 / maxDim;
                 currentModel.scale.set(scale, scale, scale);
@@ -373,7 +400,7 @@
 
                 scene.add(currentModel);
                 document.querySelector('.loader-3d').style.display = 'none';
-                
+
                 // Reset Cámara
                 camera.position.set(0, 1, 5);
                 controls.reset();
@@ -391,9 +418,11 @@
 
         function closeViewer() {
             const modal = document.getElementById('viewer-modal');
-            gsap.to(modal, { opacity: 0, duration: 0.3, onComplete: () => {
-                modal.classList.remove('show');
-            }});
+            gsap.to(modal, {
+                opacity: 0, duration: 0.3, onComplete: () => {
+                    modal.classList.remove('show');
+                }
+            });
         }
     </script>
 
