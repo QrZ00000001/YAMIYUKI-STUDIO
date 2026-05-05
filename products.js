@@ -1,0 +1,53 @@
+const products = [
+    {
+        id: "nfc-support",
+        name: "Soporte NFC",
+        tag: "Corporativo",
+        material: "PLA+",
+        colors: [
+            { name: "Negro", hex: "#000", img: "assets/NFC_Black.png" },
+            { name: "Blanco", hex: "#fff", img: "assets/NFC_White.png" }
+        ],
+        size: "10 x 14,6 x 7,9",
+        time: "1 día hábil",
+        price: "3.500"
+    },
+    {
+        id: "case-lotus",
+        name: "Case Lotus",
+        tag: "Corporativo",
+        material: "PLA+ y Silk Plata",
+        color: "Negro y Plata",
+        size: "23cm x 7cm x 7cm",
+        time: "2 días hábiles",
+        price: "35.000",
+        image: "assets/product2.png"
+    },
+    {
+        id: "dragon",
+        name: "Articulado Dragón",
+        tag: "Articulado",
+        material: "PLA Silk Rainbow",
+        color: "Iridiscente",
+        sizes: [
+            { label: "20cm", price: "12.000" },
+            { label: "30cm", price: "18.000" },
+            { label: "50cm", price: "35.000" }
+        ],
+        image: "assets/product3.png"
+    },
+    {
+        id: "Base-cartel",
+        name: "Base Cartel",
+        tag: "Corporativo",
+        material: "PLA+",
+        colors: [
+            { name: "Negro", hex: "#000", img: "assets/Base_Black.png" },
+            { name: "Blanco", hex: "#fff", img: "assets/Base_White.png" }
+        ],
+        sizes: [
+            { label: "15x5x5cm", price: "3.000" },
+            { label: "20x5x5cm", price: "3.500" }
+        ],
+    }
+];

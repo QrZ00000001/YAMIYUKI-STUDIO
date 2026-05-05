@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yamiyuki Studio | Futuristic 3D Design</title>
+    <meta name="description"
+        content="Yamiyuki Studio - Especialistas en diseño y fabricación 3D de alta precisión. Figuras coleccionables y soluciones mecánicas.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;700;800&display=swap" rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Products Data -->
+    <script src="products.js"></script>
+</head>
+
+<body>
+
+    <!-- Particles Background -->
+    <div id="particles-js" style="position: absolute; width: 100%; height: 100%; z-index: 1;"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content container">
+            <h1 class="hero-title" id="hero-title">
+                <span class="word">YAMIYUKI</span>
+                <span class="studio-text">STUDIO</span>
+            </h1>
+        </div>
+        <div style="position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); opacity: 0.5;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Catalog Section -->
+    <main class="catalog container" id="catalog">
+        <header class="section-header">
+            <span
+                style="color: var(--primary); font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.8rem;">Catálogo</span>
+            <h2 class="section-title">Productos</h2>
+        </header>
+
+        <div class="filter-container" id="filter-pills">
+            <!-- Píldoras de categoría se cargarán aquí -->
+        </div>
+
+        <div class="grid" id="catalog-grid">
+            <!-- Los productos se cargarán aquí dinámicamente -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <span class="footer-logo">YAMIYUKI STUDIO</span>
+            <p>&copy; 2024 Yamiyuki Studio. Forjado en el futuro.</p>
+        </div>
+    </footer>
+
+    <script>
+        // MOTOR DE RENDERIZADO DE PRODUCTOS
+        function renderFilters() {
+            const container = document.getElementById('filter-pills');
+            const categories = ["Todos", ...new Set(products.map(p => p.tag))];
+
+            container.innerHTML = categories.map(cat => `
+                <button class="filter-pill ${cat === 'Todos' ? 'active' : ''}" 
+                        onclick="applyFilter('${cat}', this)">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        function applyFilter(category, el) {
+            // Actualizar UI de píldoras
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+
+            const cards = document.querySelectorAll('.product-card');
+
+            // Animación de salida y entrada
+            gsap.to(cards, {
+                opacity: 0,
+                scale: 0.95,
+                duration: 0.2,
+                stagger: 0.05,
+                onComplete: () => {
+                    renderProducts(category);
+                    const newCards = document.querySelectorAll('.product-card');
+                    gsap.fromTo(newCards,
+                        { opacity: 0, scale: 0.95, y: 20 },
+                        { opacity: 1, scale: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power2.out" }
+                    );
+                    ScrollTrigger.refresh();
+                }
+            });
+        }
+
+        function renderProducts(filter = "Todos") {
+            const grid = document.getElementById('catalog-grid');
+            const filtered = filter === "Todos" ? products : products.filter(p => p.tag === filter);
+
+            grid.innerHTML = filtered.map(p => `
+                <article class="product-card glass" data-category="${p.tag}">
+                    <div class="product-image-wrapper">
+                        ${(p.image || (p.colors && p.colors[0].img)) ? 
+                            `<img src="${p.image || p.colors[0].img}" alt="${p.name}" class="product-image" id="img-${p.id}">` :
+                            `<div class="placeholder-img" style="display:flex;align-items:center;justify-content:center;height:100%;background:#fff;color:#000;font-weight:800;text-align:center;padding:1rem;">${p.name}</div>`
+                        }
+                    </div>
+                    <div class="product-info">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span class="product-tag">${p.tag}</span>
+                            ${p.colors ? `
+                                <div class="color-swatches">
+                                    ${p.colors.map((c, i) => `
+                                        <div class="swatch ${i === 0 ? 'active' : ''}" 
+                                             style="background: ${c.hex};" 
+                                             onclick="changeProductColor('${p.id}', '${c.img}', '${c.name}', this)" 
+                                             title="${c.name}"></div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                        <h3 class="product-name">${p.name}</h3>
+                        <div class="product-details">
+                            <div class="detail-row"><span class="detail-label">Material</span><span>${p.material}</span></div>
+                            <div class="detail-row"><span class="detail-label">Color</span><span id="color-${p.id}">${p.color || p.colors[0].name}</span></div>
+                            <div class="detail-row">
+                                <span class="detail-label">Medida</span>
+                                ${p.sizes ? `
+                                    <div class="custom-select" id="select-${p.id}">
+                                        <div class="select-trigger" onclick="toggleSelect('${p.id}')">
+                                            <span id="val-${p.id}">${p.sizes[0].label}</span>
+                                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </div>
+                                        <div class="select-options" id="opts-${p.id}">
+                                            ${p.sizes.map(s => `<div class="select-option" onclick="selectSize('${p.id}', '${s.label}', '${s.price}')">${s.label}</div>`).join('')}
+                                        </div>
+                                    </div>
+                                ` : `<span>${p.size}</span>`}
+                            </div>
+                            <div class="detail-row"><span class="detail-label">Tiempo</span><span>${p.time}</span></div>
+                        </div>
+                        <div class="product-footer">
+                            <span class="price">$<span id="price-${p.id}">${p.price || p.sizes[0].price}</span> <small class="currency">CLP</small></span>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function changeProductColor(id, imgPath, colorName, el) {
+            const img = document.getElementById(`img-${id}`);
+            const colorText = document.getElementById(`color-${id}`);
+
+            gsap.to(img, {
+                opacity: 0, duration: 0.2, onComplete: () => {
+                    img.src = imgPath;
+                    gsap.to(img, { opacity: 1, duration: 0.3 });
+                }
+            });
+            colorText.textContent = colorName;
+            el.parentElement.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // PARTICLES CONFIG
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#8b5cf6" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": false },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#8b5cf6", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+
+        // GSAP: INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            renderFilters();
+            renderProducts();
+
+            const title = document.querySelector('#hero-title .word');
+            const studio = document.querySelector('#hero-title .studio-text');
+            const splitText = (el) => { el.innerHTML = el.textContent.replace(/\S/g, "<span class='char'>$&</span>"); };
+
+            splitText(title);
+            splitText(studio);
+
+            const tl = gsap.timeline();
+            tl.from(".word .char", { duration: 1, y: 50, opacity: 0, stagger: 0.05, ease: "power3.out" })
+                .from(".studio-text .char", { duration: 0.8, y: 20, opacity: 0, stagger: 0.02, ease: "power2.out" }, "-=0.6");
+
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.utils.toArray(".product-card").forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none none" },
+                    duration: 1, y: 50, opacity: 0, ease: "power2.out", delay: i * 0.1
+                });
+            });
+            ScrollTrigger.refresh();
+        });
+
+        // LÓGICA CUSTOM SELECT
+        function toggleSelect(id) {
+            const opts = document.getElementById(`opts-${id}`);
+            const trigger = document.querySelector(`#select-${id} .select-trigger svg`);
+
+            if (opts.classList.contains('show')) {
+                gsap.to(opts, { opacity: 0, y: -10, duration: 0.2, onComplete: () => opts.classList.remove('show') });
+                gsap.to(trigger, { rotate: 0, duration: 0.2 });
+            } else {
+                opts.classList.add('show');
+                gsap.fromTo(opts, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(1.7)" });
+                gsap.to(trigger, { rotate: 180, duration: 0.3 });
+            }
+        }
+
+        function selectSize(id, val, price) {
+            document.getElementById(`val-${id}`).textContent = val;
+            const priceEl = document.getElementById(`price-${id}`);
+
+            if (price) {
+                gsap.fromTo(priceEl, { opacity: 0.5, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3 });
+                priceEl.textContent = price;
+            }
+
+            toggleSelect(id);
+        }
+
+        // Cerrar selectores al hacer clic fuera
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-select')) {
+                document.querySelectorAll('.select-options.show').forEach(opt => {
+                    const id = opt.id.replace('opts-', '');
+                    toggleSelect(id);
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>
