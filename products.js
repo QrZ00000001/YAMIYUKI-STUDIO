@@ -55,18 +55,20 @@ const products = [
         model: "assets/models/Base-Cartel.glb"
     },
     {
-        id: "Medalla",
-        name: "Medalla",
+        id: "medallas",
+        name: "medallas",
         tag: "Corporativo",
-        material: "PLA+",
+        material: "Silk Gold, Silver y Bronze",
         colors: [
-            { name: "Negro", hex: "#000", img: "assets/img/Base_Black.png" },
-            { name: "Blanco", hex: "#fff", img: "assets/img/Base_White.png" }
+            { name: "Gold", hex: "#c99a00ff", img: "assets/img/Medalla_Gold.png" },
+            { name: "Silver", hex: "#a8a8a8ff", img: "assets/img/Medalla_Silver.png" },
+            { name: "Bronce", hex: "#a05b00ff", img: "assets/img/Medalla_Bronce.png" }
         ],
         sizes: [
-            { label: "15x5x5cm", price: "3.000" },
-            { label: "20x5x5cm", price: "3.500" }
+            { label: "10x9,5x0,7cm", price: "1.000" },
+            { label: "7x6,9x0,5cm", price: "700" }
         ],
-        model: "assets/models/medalla.glb"
-    }
+        time: "1 día hábil",
+        model: "assets/models/Medalla.glb"
+    },
 ];
