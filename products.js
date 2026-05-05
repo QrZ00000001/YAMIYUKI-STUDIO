@@ -8,7 +8,7 @@ const products = [
             { name: "Negro", hex: "#000", img: "assets/img/NFC_Black.png" },
             { name: "Blanco", hex: "#fff", img: "assets/img/NFC_White.png" }
         ],
-        size: "10 x 14,6 x 7,9",
+        size: "10 x 14,6 x 7,9cm",
         time: "1 día hábil",
         price: "3.500",
         model: "assets/models/Stand-NFC.glb"
@@ -55,8 +55,8 @@ const products = [
         model: "assets/models/Base-Cartel.glb"
     },
     {
-        id: "medallas",
-        name: "medallas",
+        id: "Medallas",
+        name: "Medallas",
         tag: "Corporativo",
         material: "Silk Gold, Silver y Bronze",
         colors: [
@@ -65,10 +65,25 @@ const products = [
             { name: "Bronce", hex: "#a05b00ff", img: "assets/img/Medalla_Bronce.png" }
         ],
         sizes: [
-            { label: "10x9,5x0,7cm", price: "1.000" },
-            { label: "7x6,9x0,5cm", price: "700" }
+            { label: "10 x 9,5 x 0,7cm", price: "1.000" },
+            { label: "7 x 6,9 x 0,5cm", price: "700" }
         ],
         time: "1 día hábil",
         model: "assets/models/Medalla.glb"
+    },
+    {
+        id: "soporte-pared-celular",
+        name: "Soporte Pared Celular",
+        tag: "Corporativo",
+        material: "PLA+",
+        colors: [
+            { name: "Negro", hex: "#000", img: "assets/img/Soporte_Pared_Celular_Negro.png" },
+            { name: "Blanco", hex: "#fff", img: "assets/img/Soporte_Pared_Celular_Blanco.png" }
+        ],
+        sizes: [
+            { label: "Segun medida Celular", price: "5.000" }
+        ],
+        time: "1 día hábil",
+        model: "assets/models/Soporte-Pared-Celular.glb"
     },
 ];
