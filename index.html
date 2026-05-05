@@ -345,7 +345,8 @@
 
             // Cargador R128
             const loader = new THREE.GLTFLoader();
-            const modelPath = product.model;
+            // Cache buster para forzar carga en GitHub
+            const modelPath = product.model + "?v=" + Date.now();
             console.log("Intentando cargar:", modelPath);
 
             loader.load(modelPath, (gltf) => {
