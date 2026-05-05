@@ -21,6 +21,7 @@
     <!-- Three.js (Legacy Global Versions for Compatibility) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/DRACOLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/controls/OrbitControls.js"></script>
     <!-- Products Data -->
     <script src="products.js"></script>
@@ -306,6 +307,9 @@
             // Controles
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
+            controls.dampingFactor = 0.1; // Frena más rápido, se siente más ágil
+            controls.rotateSpeed = 0.8;   // Gira un poco más rápido con el ratón
+            controls.zoomSpeed = 1.2;     // Zoom más responsivo
 
             // Luces
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -343,10 +347,15 @@
             document.querySelector('.loader-3d').style.display = 'block';
             document.querySelector('.loader-3d').textContent = "Cargando modelo 3D...";
 
-            // Cargador R128
+            // Cargador R128 con soporte para compresión DRACO
             const loader = new THREE.GLTFLoader();
-            // Cache buster para forzar carga en GitHub
-            const modelPath = product.model + "?v=" + Date.now();
+            
+            const dracoLoader = new THREE.DRACOLoader();
+            // Ruta a los decodificadores de Google Draco
+            dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/libs/draco/');
+            loader.setDRACOLoader(dracoLoader);
+
+            const modelPath = product.model;
             console.log("Intentando cargar:", modelPath);
 
             loader.load(modelPath, (gltf) => {
@@ -370,11 +379,12 @@
                 controls.reset();
             }, undefined, (error) => {
                 console.error("Error detallado:", error);
+                const errorMsg = error && error.message ? error.message : String(error);
                 document.querySelector('.loader-3d').innerHTML = `
-                    Error: No se pudo cargar el archivo.<br>
-                    <small style="font-size: 0.7rem; color: #94a3b8;">
-                        Si usas file://, intenta con un servidor local (Live Server).
-                    </small>
+                    <div style="color: #ef4444; font-size: 0.9rem;">
+                        <b>Error técnico:</b><br>
+                        ${errorMsg}
+                    </div>
                 `;
             });
         }
