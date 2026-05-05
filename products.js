@@ -5,12 +5,13 @@ const products = [
         tag: "Corporativo",
         material: "PLA+",
         colors: [
-            { name: "Negro", hex: "#000", img: "assets/NFC_Black.png" },
-            { name: "Blanco", hex: "#fff", img: "assets/NFC_White.png" }
+            { name: "Negro", hex: "#000", img: "assets/img/NFC_Black.png" },
+            { name: "Blanco", hex: "#fff", img: "assets/img/NFC_White.png" }
         ],
         size: "10 x 14,6 x 7,9",
         time: "1 día hábil",
-        price: "3.500"
+        price: "3.500",
+        model: "assets/models/Stand-NFC.glb"
     },
     {
         id: "case-lotus",
@@ -21,7 +22,8 @@ const products = [
         size: "23cm x 7cm x 7cm",
         time: "2 días hábiles",
         price: "35.000",
-        image: "assets/product2.png"
+        image: "assets/img/product2.png",
+        model: "assets/models/case_lotus.glb"
     },
     {
         id: "dragon",
@@ -34,7 +36,8 @@ const products = [
             { label: "30cm", price: "18.000" },
             { label: "50cm", price: "35.000" }
         ],
-        image: "assets/product3.png"
+        image: "assets/img/product3.png",
+        model: "assets/models/dragon.glb"
     },
     {
         id: "Base-cartel",
@@ -42,12 +45,28 @@ const products = [
         tag: "Corporativo",
         material: "PLA+",
         colors: [
-            { name: "Negro", hex: "#000", img: "assets/Base_Black.png" },
-            { name: "Blanco", hex: "#fff", img: "assets/Base_White.png" }
+            { name: "Negro", hex: "#000", img: "assets/img/Base_Black.png" },
+            { name: "Blanco", hex: "#fff", img: "assets/img/Base_White.png" }
         ],
         sizes: [
             { label: "15x5x5cm", price: "3.000" },
             { label: "20x5x5cm", price: "3.500" }
         ],
+        model: "assets/models/Base-Cartel.glb"
+    },
+    {
+        id: "Medalla",
+        name: "Medalla",
+        tag: "Corporativo",
+        material: "PLA+",
+        colors: [
+            { name: "Negro", hex: "#000", img: "assets/img/Base_Black.png" },
+            { name: "Blanco", hex: "#fff", img: "assets/img/Base_White.png" }
+        ],
+        sizes: [
+            { label: "15x5x5cm", price: "3.000" },
+            { label: "20x5x5cm", price: "3.500" }
+        ],
+        model: "assets/models/medalla.glb"
     }
 ];
