@@ -214,7 +214,7 @@
             // AQUÍ PONES TU NÚMERO (código de país + número, sin el + ni espacios)
             const phoneNumber = "56992989785";
 
-            const message = `Hola Yamiyuki! 🚀\nMe interesa este producto:\n\n*${product.name}*\n🎨 Color: ${currentColor}\n📏 Medida: ${currentSize}\n💰 Precio: $${currentPrice} CLP\n\n¿Tienen disponibilidad?`;
+            const message = `Hola Yamiyuki!\nMe interesa este producto:\n\n*${product.name}*\n- Color: ${currentColor}\n- Medida: ${currentSize}\n- Precio: $${currentPrice} CLP\n\n¿Tienen disponibilidad?`;
 
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
